@@ -1,0 +1,96 @@
+<HTML>
+  <div class = 'container-fluid row text-center'>
+  <div class = 'col-xs-12'>
+    <h1> Wikipedia Viewer</h1>
+    <img src="http://www.renunganhariankristen.net/wp-content/uploads/2013/08/find-300x300.jpg">
+  </div>
+  <div class = 'col-xs-12'>
+    <input class = 'style-1' id = 'search' type = 'text' required placeholder = 'search! :]'>
+    <button class = 'btn' id = 'go' type = 'submit'>Search!</button>
+    
+    <p class='hide' id = 'content'></p>
+  </div>
+  <div id = 'footer'>
+  
+   </div>
+    
+ </div>
+</body>
+
+<CSS>
+
+html, body {
+  background:white;
+}
+p {
+  background: transparent;
+
+}
+
+h1{
+  padding-bottom: 100px;
+}
+
+h2{
+  background: white;
+  border-color: maroon;
+  border-style:solid;
+  text-align: left;
+  color: black;
+  padding: 10px;
+}
+
+
+input[type="text"] {
+  font-family: Times New Roman;
+  font-size: 18px;
+  appearance: none;
+  border-radius: none;
+  height: 35px;
+}
+a {
+  color: black;
+  text-decoration: none;
+}
+
+button {
+  margin-left: 5px;
+}
+
+</CSS>
+
+<JS>
+
+$(document).ready(function() {
+  var p = document.querySelector('p');
+
+  $("#go").click(function() {
+    var input = document.getElementById('search').value;
+    var encoded = encodeURIComponent(input)
+    if (input === '') {
+      p.style.backgroundColor = 'transparent';
+      p.classList.add = 'hide';
+      p.innerHTML = '';
+    } else {
+      $.getJSON("https://en.wikipedia.org/w/api.php?action=opensearch&datatype=json&limit=5&search=" + encoded + "&callback=?", function(data) {
+        p.innerHTML = "<br> Click the links below </br>";
+        p.classList.remove('hide');
+        var i = 0
+        for (i; i < 5; i++) {
+          if (data[3][0] == undefined) {
+            p.innerHTML = '<h2> No Matching Result </h2>'
+          } else if (data[3][i] !== undefined) {
+            p.innerHTML += '<h2> <a href ="' + data[3][i] + '" target = "_blank">' + data[1][i] + '<br>' + '<h3>' + data[2][i] + '</h3>' + '</h2>'
+          } else {
+            p.innerHTML += '<h2 class = "hide"> </h2>';
+          }
+        }
+      });
+    }
+  });
+});
+
+</JS>
+
+
+    
